@@ -13,11 +13,17 @@ public class GameCharacterController : MonoBehaviour
 
     public Transform transUserName;
 
+    public Transform transCameraPosition;
+
     public float chaMoveSpeed = 2;
 
     public float characterRotationSpeed = 1;
 
+    public float cameraOrbitSpeed = 10;
+
     private TMP_Text txt_playerId;
+
+    private Vector3 prevTouch;
 
     void Start() {
         txt_playerId =  Instantiate(prefab_playerName).transform.GetComponent<TMP_Text>();
@@ -33,9 +39,35 @@ public class GameCharacterController : MonoBehaviour
         Vector3 screenPoint = Camera.main.WorldToScreenPoint(transUserName.position);
         screenPoint.z = 0;
         txt_playerId.transform.position = screenPoint;
+
         if(!photonView.IsMine) return;
+
         float offsetMovement = 0;
         float offsetRotation = 0;
+        float orbitSpeed = 0;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mousePos = Input.mousePosition;
+            prevTouch = mousePos;
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector3 mousePos = Input.mousePosition;
+            prevTouch = mousePos;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 mousePos = Input.mousePosition;
+
+            if(mousePos.x - prevTouch.x > 1f) {
+                orbitSpeed = cameraOrbitSpeed * Time.deltaTime;
+            } else if(mousePos.x - prevTouch.x < -1f){
+                orbitSpeed = -cameraOrbitSpeed * Time.deltaTime;
+            }
+        }
 
         if (Input.GetKey(KeyCode.D))
         {
@@ -71,6 +103,7 @@ public class GameCharacterController : MonoBehaviour
 
         transform.Rotate(new Vector3(0, 1, 0) * offsetRotation, Space.Self);
         transform.position += transform.forward * offsetMovement;
+        transCameraPosition.RotateAround(transform.position, Vector3.up, orbitSpeed);
     }
 
     public bool IsAnimatingState(string stateName) {
