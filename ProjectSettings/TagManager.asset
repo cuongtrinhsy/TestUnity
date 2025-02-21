@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Character
   - cam_character
+  - Bullet
+  - MainUI_Canvas
   layers:
   - Default
   - TransparentFX
