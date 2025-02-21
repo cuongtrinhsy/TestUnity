@@ -2,6 +2,9 @@
 1. Download lastest Unity 6 version (6000.0.39f1)
 2. Open project , and Go to File -> Build Profiles -> In Platform session -> Select MacOS -> Switch Platform -> And then hit the "Build"
 3. In built folder -> Run built application
+4. How to play : 
+- Move character by ASDW key
+- Rotate camera by holding left mouse button and left-drag or right-drag
 
 # About Photon : a lib to wrap functions for creating multiplayer game
 1. Go to asset store,and download Pun 2 plugins
