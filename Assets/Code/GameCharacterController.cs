@@ -25,8 +25,9 @@ public class GameCharacterController : MonoBehaviour
 
     private Vector3 prevTouch;
 
-    void Start() {
-        txt_playerId =  Instantiate(prefab_playerName).transform.GetComponent<TMP_Text>();
+    void Start()
+    {
+        txt_playerId = Instantiate(prefab_playerName).transform.GetComponent<TMP_Text>();
         Transform canvas = GameObject.FindWithTag("MainUI_Canvas").transform;
         txt_playerId.transform.SetParent(canvas, false);
     }
@@ -40,7 +41,7 @@ public class GameCharacterController : MonoBehaviour
         screenPoint.z = 0;
         txt_playerId.transform.position = screenPoint;
 
-        if(!photonView.IsMine) return;
+        if (!photonView.IsMine) return;
 
         float offsetMovement = 0;
         float offsetRotation = 0;
@@ -62,9 +63,12 @@ public class GameCharacterController : MonoBehaviour
         {
             Vector3 mousePos = Input.mousePosition;
 
-            if(mousePos.x - prevTouch.x > 1f) {
+            if (mousePos.x - prevTouch.x > 1f)
+            {
                 orbitSpeed = cameraOrbitSpeed * Time.deltaTime;
-            } else if(mousePos.x - prevTouch.x < -1f){
+            }
+            else if (mousePos.x - prevTouch.x < -1f)
+            {
                 orbitSpeed = -cameraOrbitSpeed * Time.deltaTime;
             }
         }
@@ -98,6 +102,7 @@ public class GameCharacterController : MonoBehaviour
 
         if (offsetMovement == 0 && !IsAnimatingState("jump"))
         {
+            ResetAllTriggers();
             chaAnimator.SetTrigger("idle");
         }
 
@@ -106,7 +111,19 @@ public class GameCharacterController : MonoBehaviour
         transCameraPosition.RotateAround(transform.position, Vector3.up, orbitSpeed);
     }
 
-    public bool IsAnimatingState(string stateName) {
+    private void ResetAllTriggers()
+    {
+        foreach (var param in chaAnimator.parameters)
+        {
+            if (param.type == AnimatorControllerParameterType.Trigger)
+            {
+                chaAnimator.ResetTrigger(param.name);
+            }
+        }
+    }
+
+    public bool IsAnimatingState(string stateName)
+    {
         return chaAnimator.GetCurrentAnimatorStateInfo(0).IsName(stateName);
     }
- }
+}
