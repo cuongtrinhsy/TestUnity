@@ -95,15 +95,15 @@ public class GameCharacterController : MonoBehaviour
             offsetMovement += -chaMoveSpeed * Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            chaAnimator.SetTrigger("jump");
-        }
-
         if (offsetMovement == 0 && !IsAnimatingState("jump"))
         {
             ResetAllTriggers();
             chaAnimator.SetTrigger("idle");
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            chaAnimator.SetTrigger("jump");
         }
 
         transform.Rotate(new Vector3(0, 1, 0) * offsetRotation, Space.Self);
